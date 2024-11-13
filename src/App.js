@@ -4,13 +4,11 @@ import TareaCard from './components/TareaCard';
 const TaskApp = () => {
   const [tasks, setTasks] = useState([]);
 
-  // Cargar tareas desde localStorage al iniciar la aplicación
   useEffect(() => {
     const storedTasks = JSON.parse(localStorage.getItem('tasks')) || [];
     setTasks(storedTasks);
   }, []);
 
-  // Guardar tareas en localStorage cada vez que se actualicen
   useEffect(() => {
     if (tasks.length > 0) {
       localStorage.setItem('tasks', JSON.stringify(tasks));
@@ -23,7 +21,7 @@ const TaskApp = () => {
     const updatedTasks = tasks.map(task => {
       if (task.id === taskId) {
         const updatedFiles = [...task.files, file.name];
-        localStorage.setItem(`task-${taskId}-files`, JSON.stringify(updatedFiles)); // Guardar archivos
+        localStorage.setItem(`task-${taskId}-files`, JSON.stringify(updatedFiles));
         return { ...task, files: updatedFiles };
       }
       return task;
@@ -35,7 +33,7 @@ const TaskApp = () => {
     const updatedTasks = tasks.map(task => {
       if (task.id === taskId) {
         const updatedFiles = task.files.filter(file => file !== fileName);
-        localStorage.setItem(`task-${taskId}-files`, JSON.stringify(updatedFiles)); // Guardar archivos
+        localStorage.setItem(`task-${taskId}-files`, JSON.stringify(updatedFiles));
         return { ...task, files: updatedFiles };
       }
       return task;
@@ -46,7 +44,7 @@ const TaskApp = () => {
   const handleAddTask = () => {
     if (newTask.title && newTask.description) {
       const newTaskObj = {
-        id: tasks.length + 1, // Generar un nuevo id basado en el tamaño actual
+        id: tasks.length + 1,
         title: newTask.title,
         description: newTask.description,
         completed: false,
@@ -54,17 +52,15 @@ const TaskApp = () => {
       };
       const updatedTasks = [...tasks, newTaskObj];
       setTasks(updatedTasks);
-      setNewTask({ title: '', description: '' }); // Limpiar formulario
+      setNewTask({ title: '', description: '' });
     }
   };
 
   const handleDeleteTask = (taskId) => {
     const updatedTasks = tasks.filter(task => task.id !== taskId);
     setTasks(updatedTasks);
-    
-    // Eliminar la tarea de localStorage
-    localStorage.setItem('tasks', JSON.stringify(updatedTasks)); // Actualizar tasks en localStorage
-    localStorage.removeItem(`task-${taskId}-files`); // Eliminar los archivos asociados a la tarea eliminada
+    localStorage.setItem('tasks', JSON.stringify(updatedTasks));
+    localStorage.removeItem(`task-${taskId}-files`);
   };
   
   const handleToggleCompleted = (taskId) => {
@@ -78,11 +74,9 @@ const TaskApp = () => {
   };
 
   return (
-    <div>
+    <div className='flex flex-col items-center w-full gap-2 bg-blue-900 h-screen'>
       <h1 className="text-3xl font-semibold mb-6">Lista de Tareas</h1>
-
-      {/* Formulario para agregar tareas */}
-      <div className="mb-6">
+      <div className="mb-6 flex flex-col w-1/3 gap-1 justify-center items-center">
         <input
           type="text"
           value={newTask.title}
@@ -99,30 +93,22 @@ const TaskApp = () => {
         />
         <button
           onClick={handleAddTask}
-          className="px-4 py-2 bg-blue-500 text-white rounded"
+          className="px-4 py-2 bg-blue-500 text-white rounded w-1/2"
         >
           Agregar Tarea
         </button>
       </div>
 
-      {/* Lista de tareas */}
       <div>
         {tasks.map(task => (
-          <div key={task.id} className="mb-4">
-            <TareaCard
-              tarea={task}
-              onFileUpload={handleFileUpload}
-              onFileDelete={handleFileDelete}
-              onToggleCompleted={handleToggleCompleted}
-            />
-            {/* Botón para eliminar tarea */}
-            <button
-              onClick={() => handleDeleteTask(task.id)}
-              className="mt-2 text-red-500 hover:text-red-700"
-            >
-              Eliminar tarea
-            </button>
-          </div>
+          <TareaCard
+            key={task.id}
+            tarea={task}
+            onFileUpload={handleFileUpload}
+            onFileDelete={handleFileDelete}
+            onToggleCompleted={handleToggleCompleted}
+            onDeleteTask={handleDeleteTask} // Pasamos la función de eliminación
+          />
         ))}
       </div>
     </div>
