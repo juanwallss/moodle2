@@ -3,6 +3,7 @@ import TareaCard from './components/TareaCard';
 
 const TaskApp = () => {
   const [tasks, setTasks] = useState([]);
+  const [filter, setFilter] = useState('all'); // Estado para el filtro
 
   useEffect(() => {
     const storedTasks = JSON.parse(localStorage.getItem('tasks')) || [];
@@ -62,7 +63,7 @@ const TaskApp = () => {
     localStorage.setItem('tasks', JSON.stringify(updatedTasks));
     localStorage.removeItem(`task-${taskId}-files`);
   };
-  
+
   const handleToggleCompleted = (taskId) => {
     const updatedTasks = tasks.map(task => {
       if (task.id === taskId) {
@@ -73,9 +74,17 @@ const TaskApp = () => {
     setTasks(updatedTasks);
   };
 
+  // Filtrar las tareas según el estado del filtro
+  const filteredTasks = tasks.filter(task => {
+    if (filter === 'completed') return task.completed;
+    if (filter === 'notCompleted') return !task.completed;
+    return true; // 'all'
+  });
+
   return (
-    <div className='flex flex-col items-center w-full gap-2 bg-blue-900 h-screen'>
-      <h1 className="text-3xl font-semibold mb-6">Lista de Tareas</h1>
+    <div className='flex flex-col items-center overflow-auto w-full gap-2 bg-blue-900 h-screen'>
+      <h1 className="mt-3 text-white text-3xl font-semibold mb-6">Moodle v2</h1>
+
       <div className="mb-6 flex flex-col w-1/3 gap-1 justify-center items-center">
         <input
           type="text"
@@ -99,15 +108,38 @@ const TaskApp = () => {
         </button>
       </div>
 
-      <div>
-        {tasks.map(task => (
+      {/* Botones de filtrado */}
+      <div className="mb-6 flex gap-4">
+        <button
+          onClick={() => setFilter('all')}
+          className={`px-4 py-2 rounded ${filter === 'all' ? 'bg-green-500 text-white' : 'bg-gray-200'}`}
+        >
+          Todas
+        </button>
+        <button
+          onClick={() => setFilter('completed')}
+          className={`px-4 py-2 rounded ${filter === 'completed' ? 'bg-green-500 text-white' : 'bg-gray-200'}`}
+        >
+          Completadas
+        </button>
+        <button
+          onClick={() => setFilter('notCompleted')}
+          className={`px-4 py-2 rounded ${filter === 'notCompleted' ? 'bg-green-500 text-white' : 'bg-gray-200'}`}
+        >
+          No Completadas
+        </button>
+      </div>
+
+      {/* Mostrar tareas filtradas */}
+      <div className='w-full p-6 flex flex-col items-center'>
+        {filteredTasks.map(task => (
           <TareaCard
             key={task.id}
             tarea={task}
             onFileUpload={handleFileUpload}
             onFileDelete={handleFileDelete}
             onToggleCompleted={handleToggleCompleted}
-            onDeleteTask={handleDeleteTask} // Pasamos la función de eliminación
+            onDeleteTask={handleDeleteTask}
           />
         ))}
       </div>
