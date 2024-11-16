@@ -1,4 +1,4 @@
-📋 Task Manager App
+📋 Moodle v2
 
 Una aplicación de gestión de tareas intuitiva y bien diseñada, creada con React. Permite a los usuarios gestionar tareas, subir archivos y almacenar datos localmente. Perfecta para la productividad personal o para equipos pequeños que no requieran una base de datos o backend.
 
@@ -16,9 +16,9 @@ Completado de Tareas: Marca tareas como completadas y alterna entre los estados 
 🔧 Instalación
 Clona el repositorio:
 
-git clone https://github.com/tuusuario/task-manager-app.git
+git clone https://github.com/juanwallss/moodle2.git
 
-cd task-manager-app
+cd moodle2
 
 Instala las dependencias:
 
@@ -49,6 +49,3 @@ Tailwind CSS para el diseño visual.
 
 localStorage para la persistencia de datos sin backend.
 
-💬 Feedback
-
-Si tienes comentarios o ideas de mejora, no dudes en contactarnos a través de issues en GitHub o inicia una discusión. ¡Hagamos esta aplicación mejor juntos!
